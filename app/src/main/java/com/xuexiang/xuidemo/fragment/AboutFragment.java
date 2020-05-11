@@ -24,10 +24,10 @@ import com.xuexiang.xui.widget.grouplist.XUIGroupListView;
 import com.xuexiang.xuidemo.R;
 import com.xuexiang.xuidemo.base.BaseFragment;
 import com.xuexiang.xuidemo.utils.Utils;
-import com.xuexiang.xupdate.XUpdate;
 import com.xuexiang.xutil.app.AppUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -43,7 +43,8 @@ public class AboutFragment extends BaseFragment {
     TextView mVersionTextView;
     @BindView(R.id.about_list)
     XUIGroupListView mAboutGroupListView;
-    @BindView(R.id.copyright) TextView mCopyrightTextView;
+    @BindView(R.id.copyright)
+    TextView mCopyrightTextView;
 
     @Override
     protected int getLayoutId() {
@@ -61,6 +62,12 @@ public class AboutFragment extends BaseFragment {
                         Utils.goWeb(getContext(), "https://xuexiangjys.github.io/XUI/");
                     }
                 })
+                .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_wiki)), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.goWeb(getContext(), "https://github.com/xuexiangjys/XUI/wiki/");
+                    }
+                })
                 .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_github)), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -72,11 +79,17 @@ public class AboutFragment extends BaseFragment {
                     public void onClick(View v) {
                         Utils.checkUpdate(getContext(), true);
                     }
+                }).addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_sponsor)), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openPage(SponsorFragment.class);
+                    }
                 })
+                .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_add_qq_group)), v -> Utils.goWeb(getContext(), getString(R.string.url_add_qq_group)))
                 .addTo(mAboutGroupListView);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy", Locale.CHINA);
-        String currentYear = dateFormat.format(new java.util.Date());
+        String currentYear = dateFormat.format(new Date());
         mCopyrightTextView.setText(String.format(getResources().getString(R.string.about_copyright), currentYear));
     }
 

@@ -4,7 +4,7 @@ import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.widget.edittext.verify.VerifyCodeEditText;
 import com.xuexiang.xuidemo.R;
 import com.xuexiang.xuidemo.base.BaseFragment;
-import com.xuexiang.xutil.tip.ToastUtils;
+import com.xuexiang.xuidemo.utils.XToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,6 +22,8 @@ public class VerifyCodeEditTextFragment extends BaseFragment implements VerifyCo
     VerifyCodeEditText vcet2;
     @BindView(R.id.vcet_3)
     VerifyCodeEditText vcet3;
+    @BindView(R.id.vcet_4)
+    VerifyCodeEditText vcet4;
 
     @Override
     protected int getLayoutId() {
@@ -38,21 +40,22 @@ public class VerifyCodeEditTextFragment extends BaseFragment implements VerifyCo
         vcet1.setOnInputListener(this);
         vcet2.setOnInputListener(this);
         vcet3.setOnInputListener(this);
+        vcet4.setOnInputListener(this);
     }
 
     @Override
     public void onComplete(String input) {
-        ToastUtils.toast("onComplete:" + input);
+        XToastUtils.toast("onComplete:" + input);
     }
 
     @Override
     public void onChange(String input) {
-        ToastUtils.toast("onChange:" + input);
+        XToastUtils.toast("onChange:" + input);
     }
 
     @Override
     public void onClear() {
-        ToastUtils.toast("onClear");
+        XToastUtils.toast("onClear");
     }
 
     @OnClick(R.id.btn_clear)
@@ -60,5 +63,6 @@ public class VerifyCodeEditTextFragment extends BaseFragment implements VerifyCo
         vcet1.clearInputValue();
         vcet2.clearInputValue();
         vcet3.clearInputValue();
+        vcet4.clearInputValue();
     }
 }

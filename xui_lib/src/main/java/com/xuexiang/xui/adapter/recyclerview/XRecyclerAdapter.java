@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,15 +54,21 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
     /**
      * 当前点击的条目
      */
-    private int mSelectPosition = -1;
+    protected int mSelectPosition = -1;
 
     public XRecyclerAdapter() {
-        this(null);
+
     }
 
-    public XRecyclerAdapter(List<T> list) {
+    public XRecyclerAdapter(Collection<T> list) {
         if (list != null) {
             mData.addAll(list);
+        }
+    }
+
+    public XRecyclerAdapter(T[] data) {
+        if (data != null && data.length > 0) {
+            mData.addAll(Arrays.asList(data));
         }
     }
 
@@ -131,7 +138,11 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
      * @return
      */
     public T getItem(int position) {
-        return position < getItemCount() ? mData.get(position) : null;
+        return checkPosition(position) ? mData.get(position) : null;
+    }
+
+    private boolean checkPosition(int position) {
+        return position >= 0 && position <= mData.size() - 1;
     }
 
     public boolean isEmpty() {
@@ -141,6 +152,13 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    /**
+     * @return 数据源
+     */
+    public List<T> getData() {
+        return mData;
     }
 
     /**
@@ -157,6 +175,18 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
     }
 
     /**
+     * 在列表末端增加一项
+     *
+     * @param item
+     * @return
+     */
+    public XRecyclerAdapter add(T item) {
+        mData.add(item);
+        notifyItemInserted(mData.size() - 1);
+        return this;
+    }
+
+    /**
      * 删除列表中指定索引的数据
      *
      * @param pos
@@ -165,6 +195,19 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
     public XRecyclerAdapter delete(int pos) {
         mData.remove(pos);
         notifyItemRemoved(pos);
+        return this;
+    }
+
+    /**
+     * 刷新列表中指定位置的数据
+     *
+     * @param pos
+     * @param item
+     * @return
+     */
+    public XRecyclerAdapter refresh(int pos, T item) {
+        mData.set(pos, item);
+        notifyItemChanged(pos);
         return this;
     }
 
@@ -178,8 +221,24 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
         if (collection != null) {
             mData.clear();
             mData.addAll(collection);
-            notifyDataSetChanged();
             mSelectPosition = -1;
+            notifyDataSetChanged();
+        }
+        return this;
+    }
+
+    /**
+     * 刷新列表数据
+     *
+     * @param array
+     * @return
+     */
+    public XRecyclerAdapter refresh(T[] array) {
+        if (array != null && array.length > 0) {
+            mData.clear();
+            mData.addAll(Arrays.asList(array));
+            mSelectPosition = -1;
+            notifyDataSetChanged();
         }
         return this;
     }
@@ -193,6 +252,20 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
     public XRecyclerAdapter loadMore(Collection<T> collection) {
         if (collection != null) {
             mData.addAll(collection);
+            notifyDataSetChanged();
+        }
+        return this;
+    }
+
+    /**
+     * 加载更多
+     *
+     * @param array
+     * @return
+     */
+    public XRecyclerAdapter loadMore(T[] array) {
+        if (array != null && array.length > 0) {
+            mData.addAll(Arrays.asList(array));
             notifyDataSetChanged();
         }
         return this;
@@ -251,6 +324,26 @@ public abstract class XRecyclerAdapter<T, V extends RecyclerView.ViewHolder> ext
         mSelectPosition = selectPosition;
         notifyDataSetChanged();
         return this;
+    }
+
+    /**
+     * 获取当前列表选中项
+     *
+     * @return 当前列表选中项
+     */
+    public T getSelectItem() {
+        return getItem(mSelectPosition);
+    }
+
+    /**
+     * 清除数据
+     */
+    public void clear() {
+        if (!isEmpty()) {
+            mData.clear();
+            mSelectPosition = -1;
+            notifyDataSetChanged();
+        }
     }
 
 }

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import com.jpeng.jptabbar.anno.NorIcons;
 import com.jpeng.jptabbar.anno.SeleIcons;
 import com.jpeng.jptabbar.anno.Titles;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.xuexiang.xpage.base.XPageActivity;
 import com.xuexiang.xpage.base.XPageFragment;
 import com.xuexiang.xpage.core.CoreSwitchBean;
-import com.xuexiang.xui.XUI;
+import com.xuexiang.xui.widget.slideback.SlideBack;
 import com.xuexiang.xuidemo.R;
+import com.xuexiang.xuidemo.utils.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -28,9 +30,15 @@ public class BaseActivity extends XPageActivity {
     @Titles
     public static final int[] mTitles = {R.string.tab1, R.string.tab2, R.string.tab3, R.string.tab4};
     @SeleIcons
-    private static final int[] mSeleIcons = {R.drawable.nav_01_pre, R.drawable.nav_02_pre, R.drawable.nav_04_pre, R.drawable.nav_05_pre};
+    public static final int[] mSelectIcons = {R.drawable.nav_01_pre, R.drawable.nav_02_pre, R.drawable.nav_04_pre, R.drawable.nav_05_pre};
     @NorIcons
-    private static final int[] mNormalIcons = {R.drawable.nav_01_nor, R.drawable.nav_02_nor, R.drawable.nav_04_nor, R.drawable.nav_05_nor};
+    public static final int[] mNormalIcons = {R.drawable.nav_01_nor, R.drawable.nav_02_nor, R.drawable.nav_04_nor, R.drawable.nav_05_nor};
+
+    //============================================================================================================================================================//
+    /**
+     * 是否支持侧滑返回
+     */
+    public static final String KEY_SUPPORT_SLIDE_BACK = "key_support_slide_back";
 
     Unbinder mUnbinder;
 
@@ -42,10 +50,42 @@ public class BaseActivity extends XPageActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        XUI.initTheme(this);
+        initAppTheme();
+        initStatusBarStyle();
         super.onCreate(savedInstanceState);
         mUnbinder = ButterKnife.bind(this);
+
+        // 侧滑回调
+        if (isSupportSlideBack()) {
+            SlideBack.with(this)
+                    .haveScroll(true)
+                    .callBack(this::popPage)
+                    .register();
+        }
     }
+
+    /**
+     * 初始化应用的主题
+     */
+    protected void initAppTheme() {
+        Utils.initTheme(this);
+    }
+
+    /**
+     * 初始化状态栏的样式
+     */
+    protected void initStatusBarStyle() {
+        
+    }
+
+    /**
+     * @return 是否支持侧滑返回
+     */
+    protected boolean isSupportSlideBack() {
+        CoreSwitchBean page = getIntent().getParcelableExtra(CoreSwitchBean.KEY_SWITCH_BEAN);
+        return page == null || page.getBundle() == null || page.getBundle().getBoolean(KEY_SUPPORT_SLIDE_BACK, true);
+    }
+
 
     /**
      * 打开fragment
@@ -85,6 +125,9 @@ public class BaseActivity extends XPageActivity {
     @Override
     protected void onRelease() {
         mUnbinder.unbind();
+        if (isSupportSlideBack()) {
+            SlideBack.unregister(this);
+        }
         super.onRelease();
     }
 

@@ -25,12 +25,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.adapter.SmartViewHolder;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.adapter.recyclerview.GridDividerItemDecoration;
+import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.preview.PreviewBuilder;
@@ -38,7 +38,8 @@ import com.xuexiang.xuidemo.DemoDataProvider;
 import com.xuexiang.xuidemo.R;
 import com.xuexiang.xuidemo.adapter.PreviewRecycleAdapter;
 import com.xuexiang.xuidemo.base.BaseFragment;
-import com.xuexiang.xutil.tip.ToastUtils;
+import com.xuexiang.xuidemo.utils.SettingSPUtils;
+import com.xuexiang.xuidemo.utils.XToastUtils;
 
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class PreviewRecycleViewFragment extends BaseFragment {
                             mAdapter.loadMore(getMediaRes().get(mPage));
                             refreshLayout.finishLoadMore();
                         } else {
-                            ToastUtils.toast("数据全部加载完毕");
+                            XToastUtils.toast("数据全部加载完毕");
                             refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
                         }
                     }
@@ -139,14 +140,15 @@ public class PreviewRecycleViewFragment extends BaseFragment {
             }
         });
 
-        mAdapter.setOnItemClickListener(new SmartViewHolder.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new RecyclerViewHolder.OnItemClickListener<ImageViewInfo>() {
             @Override
-            public void onItemClick(View itemView, int position) {
+            public void onItemClick(View itemView, ImageViewInfo item, int position) {
                 computeBoundsBackward(mGridLayoutManager.findFirstVisibleItemPosition());
                 PreviewBuilder.from(getActivity())
-                        .setImgs(mAdapter.getListData())
+                        .setImgs(mAdapter.getData())
                         .setCurrentIndex(position)
                         .setSingleFling(true)
+                        .setProgressColor(SettingSPUtils.getInstance().isUseCustomTheme() ? R.color.custom_color_main_theme : R.color.xui_config_color_main_theme)
                         .setType(PreviewBuilder.IndicatorType.Number)
                         .start();
             }
@@ -158,7 +160,7 @@ public class PreviewRecycleViewFragment extends BaseFragment {
      * 从第一个完整可见item逆序遍历，如果初始位置为0，则不执行方法内循环
      */
     private void computeBoundsBackward(int firstCompletelyVisiblePos) {
-        for (int i = firstCompletelyVisiblePos; i < mAdapter.getCount(); i++) {
+        for (int i = firstCompletelyVisiblePos; i < mAdapter.getItemCount(); i++) {
             View itemView = mGridLayoutManager.findViewByPosition(i);
             Rect bounds = new Rect();
             if (itemView != null) {

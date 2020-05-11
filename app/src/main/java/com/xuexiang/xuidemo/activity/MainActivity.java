@@ -1,14 +1,14 @@
 package com.xuexiang.xuidemo.activity;
 
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +17,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.xuexiang.xuidemo.R;
 import com.xuexiang.xuidemo.adapter.menu.DrawerAdapter;
 import com.xuexiang.xuidemo.adapter.menu.DrawerItem;
@@ -27,9 +29,12 @@ import com.xuexiang.xuidemo.fragment.AboutFragment;
 import com.xuexiang.xuidemo.fragment.ComponentsFragment;
 import com.xuexiang.xuidemo.fragment.ExpandsFragment;
 import com.xuexiang.xuidemo.fragment.QRCodeFragment;
+import com.xuexiang.xuidemo.fragment.SettingFragment;
 import com.xuexiang.xuidemo.fragment.UtilitysFragment;
+import com.xuexiang.xuidemo.utils.SettingSPUtils;
+import com.xuexiang.xuidemo.utils.TokenUtils;
 import com.xuexiang.xuidemo.utils.Utils;
-import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xuidemo.utils.XToastUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.system.DeviceUtils;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
@@ -46,7 +51,7 @@ import butterknife.BindView;
  * @author xuexiang
  * @since 2018/11/13 下午5:20
  */
-public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSelectedListener {
+public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSelectedListener, ClickUtils.OnClick2ExitListener {
     private static final int POS_COMPONENTS = 0;
     private static final int POS_UTILITYS = 1;
     private static final int POS_EXPANDS = 2;
@@ -79,6 +84,11 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
         initViews();
     }
 
+    @Override
+    protected boolean isSupportSlideBack() {
+        return false;
+    }
+
     private void initViews() {
         initTab();
 
@@ -92,17 +102,17 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
     private void initTab() {
         TabLayout.Tab component = mTabLayout.newTab();
         component.setText("组件");
-        component.setIcon(R.drawable.selector_icon_tabbar_component);
+        component.setIcon(SettingSPUtils.getInstance().isUseCustomTheme() ? R.drawable.custom_selector_icon_tabbar_component : R.drawable.selector_icon_tabbar_component);
         mTabLayout.addTab(component);
 
         TabLayout.Tab util = mTabLayout.newTab();
         util.setText("工具");
-        util.setIcon(R.drawable.selector_icon_tabbar_util);
+        util.setIcon(SettingSPUtils.getInstance().isUseCustomTheme() ? R.drawable.custom_selector_icon_tabbar_util : R.drawable.selector_icon_tabbar_util);
         mTabLayout.addTab(util);
 
         TabLayout.Tab expand = mTabLayout.newTab();
         expand.setText("拓展");
-        expand.setIcon(R.drawable.selector_icon_tabbar_expand);
+        expand.setIcon(SettingSPUtils.getInstance().isUseCustomTheme() ? R.drawable.custom_selector_icon_tabbar_expand : R.drawable.selector_icon_tabbar_expand);
         mTabLayout.addTab(expand);
 
         switchPage(ComponentsFragment.class);
@@ -158,8 +168,8 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
     }
 
     private void initSlidingMenu(Bundle savedInstanceState) {
-        mMenuTitles = loadMenuTitles();
-        mMenuIcons = loadMenuIcons();
+        mMenuTitles = ResUtils.getStringArray(R.array.menu_titles);
+        mMenuIcons = ResUtils.getDrawableArray(this, R.array.menu_icons);
 
         mSlidingRootNav = new SlidingRootNavBuilder(this)
                 .withMenuOpened(false)
@@ -169,10 +179,19 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
                 .inject();
 
         mLLMenu = mSlidingRootNav.getLayout().findViewById(R.id.ll_menu);
-        mSlidingRootNav.getLayout().findViewById(R.id.iv_qrcode).setOnClickListener(new View.OnClickListener() {
+        final AppCompatImageView ivQrcode = mSlidingRootNav.getLayout().findViewById(R.id.iv_qrcode);
+        ivQrcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNewPage(QRCodeFragment.class);
+            }
+        });
+
+        final AppCompatImageView ivSetting = mSlidingRootNav.getLayout().findViewById(R.id.iv_setting);
+        ivSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewPage(SettingFragment.class);
             }
         });
 
@@ -200,7 +219,27 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
 
             @Override
             public void onDragEnd(boolean isMenuOpened) {
+                if (isMenuOpened) {
+                    if (!GuideCaseView.isShowOnce(MainActivity.this, getString(R.string.guide_key_sliding_root_navigation))) {
+                        final GuideCaseView guideStep1 = new GuideCaseView.Builder(MainActivity.this)
+                                .title("点击进入，可切换主题样式哦～～")
+                                .titleSize(18, TypedValue.COMPLEX_UNIT_SP)
+                                .focusOn(ivSetting)
+                                .build();
 
+                        final GuideCaseView guideStep2 = new GuideCaseView.Builder(MainActivity.this)
+                                .title("点击进入，扫码关注哦～～")
+                                .titleSize(18, TypedValue.COMPLEX_UNIT_SP)
+                                .focusOn(ivQrcode)
+                                .build();
+
+                        new GuideCaseQueue()
+                                .add(guideStep1)
+                                .add(guideStep2)
+                                .show();
+                        GuideCaseView.setShowOnce(MainActivity.this, getString(R.string.guide_key_sliding_root_navigation));
+                    }
+                }
             }
         });
     }
@@ -231,8 +270,8 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                MobclickAgent.onProfileSignOff();
-                                XUtil.get().exitApp();
+                                TokenUtils.handleLogoutSuccess();
+                                finish();
                             }
                         },
                         getString(R.string.lab_no),
@@ -251,27 +290,10 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
 
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(mMenuIcons[position], mMenuTitles[position])
-                .withIconTint(ResUtils.getColor(R.color.gray_icon))
+                .withIconTint(ThemeUtils.resolveColor(this, R.attr.xui_config_color_content_text))
                 .withTextTint(ThemeUtils.resolveColor(this, R.attr.xui_config_color_content_text))
                 .withSelectedIconTint(ThemeUtils.resolveColor(this, R.attr.colorAccent))
                 .withSelectedTextTint(ThemeUtils.resolveColor(this, R.attr.colorAccent));
-    }
-
-    private String[] loadMenuTitles() {
-        return getResources().getStringArray(R.array.menu_titles);
-    }
-
-    private Drawable[] loadMenuIcons() {
-        TypedArray ta = getResources().obtainTypedArray(R.array.menu_icons);
-        Drawable[] icons = new Drawable[ta.length()];
-        for (int i = 0; i < ta.length(); i++) {
-            int id = ta.getResourceId(i, 0);
-            if (id != 0) {
-                icons[i] = ContextCompat.getDrawable(this, id);
-            }
-        }
-        ta.recycle();
-        return icons;
     }
 
     /**
@@ -283,10 +305,25 @@ public class MainActivity extends BaseActivity implements DrawerAdapter.OnItemSe
             if (isMenuOpen()) {
                 closeMenu();
             } else {
-                ClickUtils.exitBy2Click();
+                ClickUtils.exitBy2Click(2000, this);
             }
         }
         return true;
     }
 
+    /**
+     * 再点击一次
+     */
+    @Override
+    public void onRetry() {
+        XToastUtils.toast("再按一次退出程序");
+    }
+
+    /**
+     * 退出
+     */
+    @Override
+    public void onExit() {
+        moveTaskToBack(true);
+    }
 }

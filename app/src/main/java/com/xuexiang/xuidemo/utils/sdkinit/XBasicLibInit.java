@@ -21,15 +21,19 @@ import android.app.Application;
 
 import com.xuexiang.xaop.XAOP;
 import com.xuexiang.xaop.util.PermissionUtils;
+import com.xuexiang.xormlite.XUIDataBaseRepository;
+import com.xuexiang.xormlite.logs.DBLog;
 import com.xuexiang.xpage.AppPageConfig;
 import com.xuexiang.xpage.PageConfig;
 import com.xuexiang.xrouter.launcher.XRouter;
-import com.xuexiang.xuidemo.BuildConfig;
+import com.xuexiang.xuidemo.MyApp;
 import com.xuexiang.xuidemo.base.BaseActivity;
+import com.xuexiang.xuidemo.base.db.InternalDataBase;
 import com.xuexiang.xuidemo.utils.LocationService;
+import com.xuexiang.xuidemo.utils.TokenUtils;
+import com.xuexiang.xuidemo.utils.XToastUtils;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.StringUtils;
-import com.xuexiang.xutil.tip.ToastUtils;
 
 import java.util.List;
 
@@ -53,6 +57,7 @@ public final class XBasicLibInit {
         initPage(application);
         initAOP(application);
         initRouter(application);
+        initDB(application);
     }
 
     /**
@@ -62,9 +67,10 @@ public final class XBasicLibInit {
      */
     private static void initUtils(Application application) {
         XUtil.init(application);
-        XUtil.debug(BuildConfig.DEBUG);
+        XUtil.debug(MyApp.isDebug());
         //百度定位
         LocationService.get().init(application);
+        TokenUtils.init(application);
     }
 
 
@@ -80,9 +86,9 @@ public final class XBasicLibInit {
                     //自动注册页面,是编译时自动生成的，build一下就出来了
                     return AppPageConfig.getInstance().getPages();
                 })
-                .debug(BuildConfig.DEBUG ? "PageLog" : null)
+                .debug(MyApp.isDebug() ? "PageLog" : null)
                 .setContainActivityClazz(BaseActivity.class)
-                .enableWatcher(BuildConfig.DEBUG)
+                .enableWatcher(MyApp.isDebug())
                 .init(application);
     }
 
@@ -95,12 +101,12 @@ public final class XBasicLibInit {
         //初始化插件
         XAOP.init(application);
         //日志打印切片开启
-        XAOP.debug(BuildConfig.DEBUG);
+        XAOP.debug(MyApp.isDebug());
         //设置动态申请权限切片 申请权限被拒绝的事件响应监听
         XAOP.setOnPermissionDeniedListener(new PermissionUtils.OnPermissionDeniedListener() {
             @Override
             public void onDenied(List<String> permissionsDenied) {
-                ToastUtils.toast("权限申请被拒绝:" + StringUtils.listToString(permissionsDenied, ","));
+                XToastUtils.error("权限申请被拒绝:" + StringUtils.listToString(permissionsDenied, ","));
             }
         });
     }
@@ -111,11 +117,25 @@ public final class XBasicLibInit {
      * @param application
      */
     private static void initRouter(Application application) {
-        if (BuildConfig.DEBUG) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
+        // 这两行必须写在init之前，否则这些配置在init过程中将无效
+        if (MyApp.isDebug()) {
             XRouter.openLog();     // 打印日志
             XRouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
         XRouter.init(application);
+    }
+
+    /**
+     * 初始化数据库框架
+     *
+     * @param application
+     */
+    private static void initDB(Application application) {
+        XUIDataBaseRepository.getInstance()
+                //设置内部存储的数据库实现接口
+                .setIDatabase(new InternalDataBase())
+                .init(application);
+        DBLog.debug(MyApp.isDebug());
     }
 
 //    /**

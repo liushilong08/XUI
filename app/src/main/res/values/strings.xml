@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">XUIDemo</string>
+    <string name="app_browser_name">XUI浏览器</string>
     <!--华文行楷字体路径，其实可以不设置-->
     <!--<string name="default_app_font_path">fonts/hwxk.ttf</string>-->
 
@@ -9,15 +10,27 @@
     <string name="lab_please_select">请选择</string>
     <string name="tip_number_only_error_message">数字必须大于0小于100!</string>
     <string name="regexp_number_only">^[1-9]?\\d$</string>
-    <string name="tip_phone_number_error">Invalid mobile number！</string>
-    <string name="regex_phone_number">^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(16[6])|(17[0,1,3,5-8])|(18[0-9])|(19[8,9]))\\d{8}$</string>
-
     <string name="common_example">示例图片</string>
 
     <string name="about_item_homepage">访问官网</string>
+    <string name="about_item_wiki">说明文档</string>
     <string name="about_item_update">版本更新</string>
-    <string name="about_item_github">GitHub</string>
+    <string name="about_item_sponsor">赞助项目</string>
+    <string name="about_item_github">GitHub主页</string>
     <string name="about_copyright">© %1$s xuexiangjys All rights reserved.</string>
+    <string name="about_item_add_qq_group">加入QQ官方交流群</string>
+    <string name="title_sponsor_explain">&#160;&#160;&#160;&#160;你的打赏是我维护的动力，我将会列出所有打赏人员的清单在Github上作为凭证，打赏前请留下打赏项目的备注！</string>
+
+    <!-- 隐私政策弹窗   -->
+    <string name="lab_exit_app">退出应用</string>
+    <string name="lab_agree">同意</string>
+    <string name="lab_disagree">不同意</string>
+    <string name="lab_look_again">再次查看</string>
+    <string name="lab_still_disagree">仍不同意</string>
+    <string name="title_reminder">温馨提示</string>
+    <string name="content_think_about_it_again">要不要再想想</string>
+    <string name="content_privacy_explain_again">我们非常重视对你个人信息的保护，承诺严格按照《%s隐私权政策》保护及处理你的信息。如果你不同意该政策，很遗憾我们将无法为你提供服务</string>
+    <string name="lab_privacy_name">《%s隐私权政策》</string>
 
     <!--ExpandableTextView-->
     <string name="etv_content_demo1">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</string>
@@ -241,6 +254,8 @@
     <string name="add_rating_title">增加星级</string>
     <string name="title_grade_class_select">班级选择</string>
     <string name="title_sex_select">性别选择</string>
+    <string name="title_constellation_select">星座选择</string>
+    <string name="title_nation_select">民族选择</string>
 
     <string name="title_toolbar">主标题</string>
     <string name="title_toolbar_sub">副标题</string>
@@ -375,6 +390,66 @@
     <!-- String related to app short cuts -->
     <string name="shortcut_label_setting">设置</string>
     <string name="shortcut_label_search">搜索</string>
+    <string name="guide_key_sliding_root_navigation">guide_key_sliding_root_navigation</string>
 
+    <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>
+    <string name="camera_permission_not_granted">Camera app cannot do anything without camera permission.</string>
+    <string name="picture_taken">Picture taken</string>
+    <string name="aspect_ratio">Aspect ratio</string>
+    <string name="switch_flash">Switch flash</string>
+    <string name="switch_camera">Switch camera</string>
+    <string name="flash_auto">Flash auto</string>
+    <string name="flash_off">Flash off</string>
+    <string name="flash_on">Flash on</string>
+
+
+    <string name="title_login_register">登录/注册</string>
+    <string name="action_get_verify_code">获取验证码</string>
+
+    <string name="title_login">登录</string>
+    <string name="title_login_by_verify_code">验证码登录</string>
+    <string name="title_register">注册</string>
+    <string name="lab_forget_password">忘记密码?</string>
+    <string name="lab_login_by_verify_code">验证码登录</string>
+    <string name="lab_login_by_password">密码登录</string>
+    <string name="tip_please_input_phone_number">请输入手机号码</string>
+    <string name="title_phone_number">手机号码</string>
+    <string name="title_password">密码</string>
+    <string name="title_old_password">旧密码</string>
+    <string name="hint_please_input_verify_code">请输入验证码</string>
+    <string name="lab_verify_code">验证码</string>
+    <string name="tip_password_error">密码必须是8~18位字母和数字的组合！</string>
+    <string name="tip_new_password_error">新密码必须是8~18位字母和数字的组合！</string>
+    <string name="tip_phone_number_error">无效的手机号！</string>
+    <string name="regex_phone_number">^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(16[6])|(17[0,1,3,5-8])|(18[0-9])|(19[8,9]))\\d{8}$</string>
+    <string name="tip_verify_code_error">请输入4位数验证码</string>
+    <string name="regex_verify_code">^\\d{4}$</string>
+    <string name="regex_password">^(?:(?=.*[a-zA-Z])(?=.*[0-9])).{8,18}$</string>
+    <string name="title_forget_password">重置密码</string>
+    <string name="lab_register_account">点击注册即表示同意</string>
+    <string name="lab_service_protocol"><![CDATA[<用户协议>]]></string>
+    <string name="url_add_qq_group"><![CDATA[https://qm.qq.com/cgi-bin/qm/qr?k=0lUqsbfHTNDbS2KK4nTPwPq07tOqAk6J&authKey=4PzQ2cQYIr28Qyg%2FkTk%2BmI7xlcq8B0IZKZGc1H3XloRrCDBO8az97DIsBHnQW0Ya]]></string>
+
+    <string name="sync">Sync</string>
+    <string name="alarm">Alarm</string>
+    <string name="camera">Camera</string>
+
+    <string name="lake_description">
+        Lake Tahoe is a large freshwater lake in the Sierra Nevada of the United States. At a surface
+        elevation of 6,225 ft (1,897 m), it straddles the border between California and Nevada, west
+        of Carson City. Lake Tahoe is the largest alpine lake in North America. Its depth is
+        1,645 ft (501 m), making it the second deepest in the United States after Crater Lake
+        (1,945 ft (593 m)). Additionally, Lake Tahoe is the sixth largest lake by volume in the
+        United States at 122,160,280 acre·ft (150,682,490 dam3), behind the five Great Lakes.
+
+The lake was formed about 2 million years ago and is a part of the Lake Tahoe Basin with the modern
+        lake being shaped during the ice ages. It is known for the clarity of its water and the
+        panorama of surrounding mountains on all sides. The area surrounding the lake is also
+        referred to as Lake Tahoe, or simply Tahoe. More than 75 percent of the lakes watershed is
+        national forest land, comprising the Lake Tahoe Basin Management Unit of the United States
+        Forest Service.
+    </string>
+    <string name="lake_tahoe_image">Image of Lake Tahoe</string>
+    <string name="lake_tahoe_title">Lake Tahoe</string>
 
 </resources>

@@ -6,10 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
-
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager.widget.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -22,6 +18,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.xuexiang.xui.R;
 import com.xuexiang.xui.logs.UILog;
@@ -132,6 +131,12 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
      */
     private boolean mIsOnePageLoop = true;
 
+    /**
+     * Banner容器的高／宽比率
+     */
+    private float mContainerScale;
+
+
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -166,7 +171,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         mDisplayMetrics = context.getResources().getDisplayMetrics();
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BaseBanner);
-        float scale = ta.getFloat(R.styleable.BaseBanner_bb_scale, -1);
+        mContainerScale = ta.getFloat(R.styleable.BaseBanner_bb_scale, -1);
 
         boolean isLoopEnable = ta.getBoolean(R.styleable.BaseBanner_bb_isLoopEnable, true);
         mDelay = ta.getInt(R.styleable.BaseBanner_bb_delay, 5);
@@ -194,7 +199,7 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         mViewPager.setOverScrollMode(OVER_SCROLL_NEVER);
         mItemWidth = mDisplayMetrics.widthPixels;
         //scale not set in xml
-        if (scale < 0) {
+        if (mContainerScale < 0) {
             if (height.equals(ViewGroup.LayoutParams.MATCH_PARENT + "")) {
                 mItemHeight = LayoutParams.MATCH_PARENT;
             } else if (height.equals(ViewGroup.LayoutParams.WRAP_CONTENT + "")) {
@@ -207,10 +212,10 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
                 mItemHeight = h;
             }
         } else {
-            if (scale > 1) {
-                scale = 1;
+            if (mContainerScale > 1) {
+                mContainerScale = 1;
             }
-            mItemHeight = (int) (mItemWidth * scale);
+            mItemHeight = (int) (mItemWidth * mContainerScale);
         }
 
         LayoutParams lp = new LayoutParams(mItemWidth, mItemHeight);
@@ -308,6 +313,20 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return mDatas != null ? mDatas.size() : 0;
     }
 
+    public int getItemHeight() {
+        return mItemHeight;
+    }
+
+    public int getItemWidth() {
+        return mItemWidth;
+    }
+
+    /**
+     * @return 获取容器的宽高比
+     */
+    public float getContainerScale() {
+        return mContainerScale;
+    }
 
     /**
      * 滚动延时,默认5秒
@@ -580,18 +599,6 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return super.dispatchTouchEvent(ev);
     }
 
-//    @Override
-//    protected void onWindowVisibilityChanged(int visibility) {
-//        super.onWindowVisibilityChanged(visibility);
-//        if (mIsSmart) {
-//            if (visibility != VISIBLE) {
-//                pauseScroll();
-//            } else {
-//                goOnScroll();
-//            }
-//        }
-//    }
-
     private class InnerBannerAdapter extends PagerAdapter {
         @Override
         public int getCount() {
@@ -604,8 +611,8 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
             inflate.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mOnItemClickL != null) {
-                        mOnItemClickL.onItemClick(position);
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, getItem(position), position);
                     }
                 }
             });
@@ -685,15 +692,31 @@ public abstract class BaseBanner<E, T extends BaseBanner<E, T>> extends Relative
         return this;
     }
 
-    private OnItemClickL mOnItemClickL;
+    private OnItemClickListener<E> mOnItemClickListener;
 
-    public BaseBanner setOnItemClickL(OnItemClickL onItemClickL) {
-        this.mOnItemClickL = onItemClickL;
+    /**
+     * 设置条目点击监听
+     *
+     * @param onItemClickListener
+     * @return
+     */
+    public BaseBanner setOnItemClickListener(OnItemClickListener<E> onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
         return this;
     }
 
-    public interface OnItemClickL {
-        void onItemClick(int position);
+    /**
+     * 条目点击监听
+     *
+     * @param <E>
+     */
+    public interface OnItemClickListener<E> {
+        /**
+         * @param view
+         * @param item
+         * @param position
+         */
+        void onItemClick(View view, E item, int position);
     }
 
     /**

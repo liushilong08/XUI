@@ -1,5 +1,6 @@
 package com.xuexiang.xuidemo.fragment.components;
 
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import com.xuexiang.xui.widget.textview.marqueen.MarqueeView;
 import com.xuexiang.xui.widget.textview.marqueen.SimpleNoticeMF;
 import com.xuexiang.xuidemo.R;
 import com.xuexiang.xuidemo.base.BaseFragment;
-import com.xuexiang.xutil.tip.ToastUtils;
+import com.xuexiang.xuidemo.utils.XToastUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,8 +60,8 @@ public class MarqueeViewFragment extends BaseFragment {
         marqueeView1.startFlipping();
         marqueeFactory1.setOnItemClickListener(new MarqueeFactory.OnItemClickListener<TextView, String>() {
             @Override
-            public void onItemClickListener(MarqueeFactory.ViewHolder<TextView, String> holder) {
-                ToastUtils.toast(holder.getData());
+            public void onItemClick(View view, MarqueeFactory.ViewHolder<TextView, String> holder) {
+                XToastUtils.toast(holder.getData());
             }
         });
         marqueeFactory1.setData(datas);
@@ -68,8 +69,8 @@ public class MarqueeViewFragment extends BaseFragment {
         MarqueeFactory<TextView, String> marqueeFactory2 = new SimpleNoticeMF(getContext());
         marqueeFactory2.setOnItemClickListener(new MarqueeFactory.OnItemClickListener<TextView, String>() {
             @Override
-            public void onItemClickListener(MarqueeFactory.ViewHolder<TextView, String> holder) {
-                ToastUtils.toast(holder.getData());
+            public void onItemClick(View view, MarqueeFactory.ViewHolder<TextView, String> holder) {
+                XToastUtils.toast(holder.getData());
             }
         });
         marqueeFactory2.setData(datas);
@@ -81,8 +82,8 @@ public class MarqueeViewFragment extends BaseFragment {
         MarqueeFactory<TextView, String> marqueeFactory3 = new SimpleNoticeMF(getContext());
         marqueeFactory3.setOnItemClickListener(new MarqueeFactory.OnItemClickListener<TextView, String>() {
             @Override
-            public void onItemClickListener(MarqueeFactory.ViewHolder<TextView, String> holder) {
-                ToastUtils.toast(holder.getData());
+            public void onItemClick(View view, MarqueeFactory.ViewHolder<TextView, String> holder) {
+                XToastUtils.toast(holder.getData());
             }
         });
         marqueeFactory3.setData(datas);
@@ -95,8 +96,8 @@ public class MarqueeViewFragment extends BaseFragment {
         MarqueeFactory<TextView, String> marqueeFactory4 = new SimpleNoticeMF(getContext());
         marqueeFactory4.setOnItemClickListener(new MarqueeFactory.OnItemClickListener<TextView, String>() {
             @Override
-            public void onItemClickListener(MarqueeFactory.ViewHolder<TextView, String> holder) {
-                ToastUtils.toast(holder.getData());
+            public void onItemClick(View view, MarqueeFactory.ViewHolder<TextView, String> holder) {
+                XToastUtils.toast(holder.getData());
             }
         });
         marqueeFactory4.setData(datas);
@@ -111,8 +112,8 @@ public class MarqueeViewFragment extends BaseFragment {
         MarqueeFactory<RelativeLayout, ComplexItemEntity> marqueeFactory5 = new ComplexViewMF(getContext());
         marqueeFactory5.setOnItemClickListener(new MarqueeFactory.OnItemClickListener<RelativeLayout, ComplexItemEntity>() {
             @Override
-            public void onItemClickListener(MarqueeFactory.ViewHolder<RelativeLayout, ComplexItemEntity> holder) {
-                ToastUtils.toast(holder.getData().toString());
+            public void onItemClick(View view, MarqueeFactory.ViewHolder<RelativeLayout, ComplexItemEntity> holder) {
+                XToastUtils.toast(holder.getData().toString());
             }
         });
         marqueeFactory5.setData(complexDatas);
@@ -126,14 +127,14 @@ public class MarqueeViewFragment extends BaseFragment {
                 if (displayMsg.toString().equals("离离原上草，一岁一枯荣。")) {
                     return null;
                 } else {
-                    ToastUtils.toast("开始滚动：" + displayMsg.toString());
+                    XToastUtils.toast("开始滚动：" + displayMsg.toString());
                     return displayMsg;
                 }
             }
 
             @Override
             public List<DisplayEntity> onMarqueeFinished(List<DisplayEntity> displayDatas) {
-                ToastUtils.toast("一轮滚动完毕！");
+                XToastUtils.toast("一轮滚动完毕！");
                 return displayDatas;
             }
         });

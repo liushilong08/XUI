@@ -110,6 +110,8 @@
     ***********************************************-->
     <!--标题栏的背景颜色-->
     <attr name="xui_actionbar_color" format="color" />
+    <!--标题栏的背景图片，优先使用背景图片，没有背景图片才使用背景颜色，可选-->
+    <attr name="xui_actionbar_background" format="reference" />
     <!--标题栏文字的颜色-->
     <attr name="xui_actionbar_text_color" format="color" />
     <!--是否支持沉浸式标题栏-->
@@ -143,6 +145,7 @@
     <attr name="xui_btn_view_height" format="dimension" />
     <attr name="xui_btn_view_text_size" format="dimension" />
     <attr name="xui_btn_view_border_width" format="dimension" />
+    <attr name="xui_btn_view_disable_color" format="color" />
 
     <attr name="xui_config_icon_drawable_padding" format="dimension" />
 

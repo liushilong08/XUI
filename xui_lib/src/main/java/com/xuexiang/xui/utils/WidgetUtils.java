@@ -20,21 +20,20 @@ package com.xuexiang.xui.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.xuexiang.xui.R;
 import com.xuexiang.xui.adapter.recyclerview.DividerItemDecoration;
 import com.xuexiang.xui.adapter.recyclerview.GridDividerItemDecoration;
+import com.xuexiang.xui.adapter.recyclerview.XGridLayoutManager;
+import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.dialog.MiniLoadingDialog;
 import com.xuexiang.xui.widget.progress.loading.IMessageLoader;
@@ -101,20 +100,52 @@ public final class WidgetUtils {
      * 初始化Grid网格RecyclerView
      *
      * @param recyclerView
-     * @param spanCount     一行的数量
+     * @param spanCount    一行的数量
+     */
+    public static void initGridRecyclerView(@NonNull RecyclerView recyclerView, int spanCount) {
+        recyclerView.setLayoutManager(new XGridLayoutManager(recyclerView.getContext(), spanCount));
+        recyclerView.addItemDecoration(new GridDividerItemDecoration(recyclerView.getContext(), spanCount));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    /**
+     * 初始化Grid网格RecyclerView
+     *
+     * @param recyclerView
+     * @param spanCount    一行的数量
      * @param dividerWidth 分割线的宽度
      */
     public static void initGridRecyclerView(@NonNull RecyclerView recyclerView, int spanCount, int dividerWidth) {
-        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), spanCount));
+        recyclerView.setLayoutManager(new XGridLayoutManager(recyclerView.getContext(), spanCount));
         recyclerView.addItemDecoration(new GridDividerItemDecoration(recyclerView.getContext(), spanCount, dividerWidth));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     /**
+     * 初始化Grid网格RecyclerView
+     *
      * @param recyclerView
+     * @param spanCount    一行的数量
+     * @param dividerWidth 分割线宽度
+     * @param dividerColor 分割线的颜色
      */
     public static void initGridRecyclerView(@NonNull RecyclerView recyclerView, int spanCount, int dividerWidth, int dividerColor) {
-        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), spanCount));
+        recyclerView.setLayoutManager(new XGridLayoutManager(recyclerView.getContext(), spanCount));
+        recyclerView.addItemDecoration(new GridDividerItemDecoration(recyclerView.getContext(), spanCount, dividerWidth, dividerColor));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    /**
+     * 初始化Grid网格RecyclerView
+     *
+     * @param recyclerView
+     * @param canScroll    是否支持滑动
+     * @param spanCount    一行的数量
+     * @param dividerWidth 分割线宽度
+     * @param dividerColor 分割线的颜色
+     */
+    public static void initGridRecyclerView(@NonNull RecyclerView recyclerView, boolean canScroll, int spanCount, int dividerWidth, int dividerColor) {
+        recyclerView.setLayoutManager(new XGridLayoutManager(recyclerView.getContext(), spanCount).setScrollEnabled(canScroll));
         recyclerView.addItemDecoration(new GridDividerItemDecoration(recyclerView.getContext(), spanCount, dividerWidth, dividerColor));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
@@ -125,7 +156,7 @@ public final class WidgetUtils {
      * @param recyclerView
      */
     public static void initRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
@@ -134,10 +165,25 @@ public final class WidgetUtils {
      * 初始化RecyclerView
      *
      * @param recyclerView
+     * @param dividerHeight 分割线的高度
      */
     public static void initRecyclerView(@NonNull RecyclerView recyclerView, int dividerHeight) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), VERTICAL, dividerHeight));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+
+    /**
+     * 初始化RecyclerView
+     *
+     * @param recyclerView
+     * @param dividerHeight 分割线的高度
+     * @param dividerColor  分割线的颜色
+     */
+    public static void initRecyclerView(@NonNull RecyclerView recyclerView, int dividerHeight, int dividerColor) {
+        recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), VERTICAL, dividerHeight, dividerColor));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -145,9 +191,12 @@ public final class WidgetUtils {
      * 初始化RecyclerView
      *
      * @param recyclerView
+     * @param canScroll     是否支持滑动
+     * @param dividerHeight 分割线的高度
+     * @param dividerColor  分割线的颜色
      */
-    public static void initRecyclerView(@NonNull RecyclerView recyclerView, int dividerHeight, int dividerColor) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+    public static void initRecyclerView(@NonNull RecyclerView recyclerView, boolean canScroll, int dividerHeight, int dividerColor) {
+        recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()).setScrollEnabled(canScroll));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), VERTICAL, dividerHeight, dividerColor));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }

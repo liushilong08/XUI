@@ -81,6 +81,14 @@
     <color name="toast_warning_color">@color/xui_config_color_waring</color>
     <color name="toast_normal_tint_color">#353A3E</color>
 
+    <color name="default_image_banner_placeholder_color">#555555</color>
+    <!--DropDownMenu-->
+    <color name="default_ddm_mask_color">#88888888</color>
+
+    <color name="default_xrs_outside_line_color">#F0F0F0</color>
+    <color name="default_sb_normal_color">#AAAAAA</color>
+
+
     <!--*********************************************
     *              Config Color                     *
     **********************************************-->

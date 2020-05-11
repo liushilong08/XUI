@@ -4,8 +4,8 @@
 
 # XUI
 [![](https://jitpack.io/v/xuexiangjys/XUI.svg)](https://jitpack.io/#xuexiangjys/XUI)
-[![api][apisvg]][api]
-[![I](https://img.shields.io/github/issues/xuexiangjys/XUI.svg)](https://github.com/xuexiangjys/XUI/issues)
+[![api](https://img.shields.io/badge/API-17+-brightgreen.svg)](https://android-arsenal.com/api?level=17)
+[![Issue](https://img.shields.io/github/issues/xuexiangjys/XUI.svg)](https://github.com/xuexiangjys/XUI/issues)
 [![Star](https://img.shields.io/github/stars/xuexiangjys/XUI.svg)](https://github.com/xuexiangjys/XUI)
 
 一个简洁而又优雅的Android原生UI框架，解放你的双手！还不赶紧点击[使用说明文档](https://github.com/xuexiangjys/XUI/wiki)，体验一下吧！
@@ -22,7 +22,13 @@
 
 ## 关于我
 
-[![github](https://img.shields.io/badge/GitHub-xuexiangjys-blue.svg)](https://github.com/xuexiangjys)   [![csdn](https://img.shields.io/badge/CSDN-xuexiangjys-green.svg)](http://blog.csdn.net/xuexiangjys)
+[![github](https://img.shields.io/badge/GitHub-xuexiangjys-blue.svg)](https://github.com/xuexiangjys)   [![csdn](https://img.shields.io/badge/CSDN-xuexiangjys-green.svg)](http://blog.csdn.net/xuexiangjys)   [![简书](https://img.shields.io/badge/简书-xuexiangjys-red.svg)](https://www.jianshu.com/u/6bf605575337)   [![掘金](https://img.shields.io/badge/掘金-xuexiangjys-brightgreen.svg)](https://juejin.im/user/598feef55188257d592e56ed)   [![知乎](https://img.shields.io/badge/知乎-xuexiangjys-violet.svg)](https://www.zhihu.com/people/xuexiangjys) 
+
+## X系列库快速集成
+
+为了方便大家快速集成X系列框架库，我提供了一个空壳模版供大家参考使用: [https://github.com/xuexiangjys/TemplateAppProject](https://github.com/xuexiangjys/TemplateAppProject)
+
+除此之外，我还特别制作了几期[视频教程](https://space.bilibili.com/483850585/channel/detail?cid=104998)供大家学习参考.
 
 ----
 
@@ -58,22 +64,23 @@ allprojects {
 ```
 dependencies {
   ...
-  //1.0.5版本后只支持androidx
-  implementation 'com.github.xuexiangjys:XUI:1.0.8'
+  //androidx项目
+  implementation 'com.github.xuexiangjys:XUI:1.1.3'
 
-  implementation 'androidx.appcompat:appcompat:1.0.2'
-  implementation 'androidx.recyclerview:recyclerview:1.0.0'
-  implementation 'com.google.android.material:material:1.1.0-alpha07'
-  implementation 'com.github.bumptech.glide:glide:4.8.0'
+  implementation 'androidx.appcompat:appcompat:1.1.0'
+  implementation 'androidx.recyclerview:recyclerview:1.1.0'
+  implementation 'com.google.android.material:material:1.1.0-beta01'
+  implementation 'com.github.bumptech.glide:glide:4.11.0'
 }
 ```
 
-【注意】如果你的项目目前还未使用androidx，那你只能使用1.0.5之前的版本了。
+【注意】如果你的项目目前还未使用androidx，请使用如下配置：
 
 ```
 dependencies {
   ...
-  implementation 'com.github.xuexiangjys:XUI:1.0.4'
+  //support项目
+  implementation 'com.github.xuexiangjys:XUI:1.0.9-support'
 
   implementation 'com.android.support:appcompat-v7:28.0.0'
   implementation 'com.android.support:recyclerview-v7:28.0.0'
@@ -142,6 +149,13 @@ protected void attachBaseContext(Context newBase) {
 }
 ```
 
+## 混淆配置
+
+```
+-keep class com.xuexiang.xui.widget.edittext.materialedittext.** { *; }
+
+```
+
 ----
 
 ## 演示（请star支持）
@@ -164,6 +178,8 @@ protected void attachBaseContext(Context newBase) {
 
 #### 蒲公英下载
 
+> 蒲公英下载的密码: xuexiangjys
+
 [![蒲公英](https://img.shields.io/badge/downloads-蒲公英-blue.svg)](https://www.pgyer.com/XUIDemo)
 
 ![](./art/download_pugongying.png)
@@ -178,24 +194,55 @@ protected void attachBaseContext(Context newBase) {
 
 * [QMUI_Android](https://github.com/Tencent/QMUI_Android)
 * [AgentWeb](https://github.com/Justson/AgentWeb)
-* [CityPicker](https://github.com/xuexiangjys/CityPicker)
-* [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
-* [PictureSelector](https://github.com/LuckSiege/PictureSelector)
+* [Android-Iconics](https://github.com/mikepenz/Android-Iconics)
 * [Android-PickerView](https://github.com/Bigkoo/Android-PickerView)
+* [CityPicker](https://github.com/xuexiangjys/CityPicker)
+* [FlycoBanner_Master](https://github.com/H07000223/FlycoBanner_Master)
+* [Linkage-RecyclerView](https://github.com/KunMinX/Linkage-RecyclerView)
 * [MaterialEditText](https://github.com/rengwuxian/MaterialEditText)
 * [MaterialSpinner](https://github.com/jaredrummler/MaterialSpinner)
-* [FlycoBanner_Master](https://github.com/H07000223/FlycoBanner_Master)
 * [MaterialProgressBar](https://github.com/DreaminginCodeZH/MaterialProgressBar)
+* [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+* [PictureSelector](https://github.com/LuckSiege/PictureSelector)
+* [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
+* [SlideBack](https://github.com/ParfoisMeng/SlideBack)
+* [SwipeRecyclerView](https://github.com/yanzhenjie/SwipeRecyclerView)
 
 ## 如果觉得项目还不错，可以考虑打赏一波
 
+> 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
+
 ![](./art/alipay.jpeg) &emsp; ![](./art/weixinpay.jpeg)
+
+感谢下面小伙伴的打赏：
+
+姓名 | 金额 | 方式
+:-|:-|:-
+C*y | 1￥ | 微信
+*流 | 1￥ | 微信
+*声 | 50￥ | 微信
+*宇涛 | 5￥ | 支付宝
+*事 | 10￥ | 微信
+优*1 | 168￥ | 微信
+*、 | 20￥ | 微信
+*钰晗 | 6￥ | 支付宝
+*娜 | 3￥ | 微信
+*米 | 20￥ | 微信
+*忘 | 10￥ | 微信
+*清红 | 1￥ | 支付宝
+*口 | 5￥ | 微信
+\* | 10.24￥ | 微信
+*俊耀 | 100￥ | 支付宝
+*俊杰 | 1￥ | 支付宝
+*鸥 | 10.24￥ | 微信
+*云 | 20.21￥ | 支付宝
+*钰晗 | 66￥ | 支付宝
+*杰柱 | 10￥ | 支付宝
+
 
 ## 联系方式
 
-[![](https://img.shields.io/badge/点击一键加入QQ交流群-602082750-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=9922861ef85c19f1575aecea0e8680f60d9386080a97ed310c971ae074998887)
+[![](https://img.shields.io/badge/XUI开源交流群-695048677-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=a2ab505862c81f1528416b585832022e835ce0abe28eefa4b0d53f8094a5691d)
+[![](https://img.shields.io/badge/XUI开源交流2群-700246750-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=39497f13d5e456d219be785361a282d2d9c8cd9ba7745f6170def9d90643e164)
 
-![](https://github.com/xuexiangjys/XPage/blob/master/img/qq_group.jpg)
-
-[apisvg]: https://img.shields.io/badge/API-17+-brightgreen.svg
-[api]: https://android-arsenal.com/api?level=17
+![](./art/xui_qq.jpg)
